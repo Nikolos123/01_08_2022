@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import React from "react";
 import AuthorList from "./components/Author";
@@ -6,7 +5,8 @@ import BookList from "./components/Books";
 import NotFound404 from "./components/NotFound404";
 import BooksAuthor from "./components/BooksAuthor";
 import axios from "axios";
-import {HashRouter, BrowserRouter, Route, Link, Switch,Redirect} from "react-router-dom";
+import {BrowserRouter, Route, Routes, Link, Navigate, useLocation} from 'react-router-dom'
+
 
 class App extends React.Component {
     constructor(props) {
@@ -45,23 +45,21 @@ class App extends React.Component {
             <div>
                 <BrowserRouter>
                     <nav>
-                        <ul>
-                            <li><Link to='/'>Author</Link></li>
-                            <li><Link to='/books'>Books</Link></li>
-                        </ul>
+                        <li> <Link to='/'>Authors</Link> </li>
+                        <li> <Link to='/books'>Books</Link> </li>
                     </nav>
-                    <Switch>
-                            <Route exact path='/' component={() => <AuthorList authors={this.state.authors}/>}/>
-                            <Route exact path='/books' component={() => <BookList books={this.state.books}/>}/>
-                            <Route path='/author/:id'>
-                                <BooksAuthor books={this.state.books}/>
-                            </Route>
-                            <Redirect from='/book' to='/books' />
-                            <Route component={NotFound404}/>
-                    </Switch>
+
+                    <Routes>
+                        <Route exact path='/' element={<Navigate to='/authors' />} />
+                        <Route exact path='/books' element={<BookList books={this.state.books} />} />
+                        <Route path='/authors'>
+                            <Route index element={<AuthorList authors={this.state.authors} />} />
+                            <Route path=':authorId' element={<BooksAuthor books={this.state.books} />} />
+                        </Route>
+                        <Route path='*' element={<NotFound404 />} />
+                    </Routes>
                 </BrowserRouter>
             </div>
-
         )
     }
 }

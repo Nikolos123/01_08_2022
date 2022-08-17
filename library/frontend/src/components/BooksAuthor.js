@@ -21,8 +21,9 @@ const BookItem = ({book}) => {
 
 
 const BooksAuthor = ({books}) => {
-    let {id} = useParams()
-    let filter_books = books.filter((book => book.authors.includes(parseInt(id))))
+    let {authorId} = useParams()
+    console.log(authorId)
+    let filter_books = books.filter((book )=> book.authors.includes(parseInt(authorId)))
     return (
         <table>
             <th>
